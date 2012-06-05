@@ -160,5 +160,4 @@ public class NameColour extends JavaPlugin implements Listener {
 		}
     }
 }
-
-    
+   
