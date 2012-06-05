@@ -1,0 +1,10 @@
+name: NameColour
+main: com.github.Heliwr.NameColour.NameColour
+author: Heliwr
+version: 0.2
+description: >
+             Assign rank-based colours to player names
+commands:
+  namecolour:
+    description: NameColour control
+    usage: /<command> reload
