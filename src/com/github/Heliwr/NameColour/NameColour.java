@@ -3,6 +3,7 @@ package com.github.Heliwr.NameColour;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
@@ -78,15 +79,23 @@ public class NameColour extends JavaPlugin implements Listener {
 	        		} else {
 		        		logger.info("[NameColour] Displayname colours reassigned from server console");
 	        		}
+		        	this.reloadConfig();
+		        	assignAll();
+	        	} else if (args[0].equalsIgnoreCase("fakeop")) {
+	    			List<Player> fakeopslist = this.getServer().matchPlayer(args[1]);
+					if (fakeopslist.size() > 1) {
+						player.sendMessage(ChatColor.RED + "Too Many Players Found");
+					} else if(fakeopslist.size() == 0) {
+						player.sendMessage(ChatColor.RED + "Player" + args[1] + "Not Found");
+					}
+	    			Player r = fakeopslist.get(0);
+	        		r.setDisplayName(ChatColor.RED + "[Op] " + r.getName() + ChatColor.WHITE);
 	        	}
-	        	this.reloadConfig();
-	        	assignAll();
         	} else {
         		logger.info("[NameColour] Command access denied for " + player.getName());
         	}
     		return true;
         }
-        
         return false;
     }
 
