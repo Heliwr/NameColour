@@ -81,16 +81,29 @@ public class NameColour extends JavaPlugin implements Listener {
 	        		}
 		        	this.reloadConfig();
 		        	assignAll();
-	        	} else if (args[0].equalsIgnoreCase("fakeop")) {
-	    			List<Player> fakeopslist = this.getServer().matchPlayer(args[1]);
-					if (fakeopslist.size() > 1) {
-						player.sendMessage(ChatColor.RED + "Too Many Players Found");
-					} else if(fakeopslist.size() == 0) {
-						player.sendMessage(ChatColor.RED + "Player" + args[1] + "Not Found");
-					}
-	    			Player r = fakeopslist.get(0);
-	        		r.setDisplayName(ChatColor.RED + "[Op] " + r.getName() + ChatColor.WHITE);
 	        	}
+        	} else {
+        		logger.info("[NameColour] Command access denied for " + player.getName());
+        	}
+    		return true;
+        } else if (cmdname.equals("fakeop") && args.length > 0) {
+        	if (player == null || player.isOp() || player.hasPermission("namecolour.admin")) {
+        		List<Player> fakeopslist = this.getServer().matchPlayer(args[0]);
+				if (fakeopslist.size() > 1) {
+					player.sendMessage(ChatColor.RED + "Too Many Players Found");
+					return false;
+				} else if(fakeopslist.size() == 0) {
+					player.sendMessage(ChatColor.RED + "Player" + args[0] + "Not Found");
+					return false;
+				}
+    			Player r = fakeopslist.get(0);
+        		if (player != null) {
+        			player.sendMessage("[NameColour] Assigning fakeop to" + r + ".");
+            		logger.info("[NameColour] Fakeop assigned to " + r + " by " + player.getName() + ".");
+        		} else {
+            		logger.info("[NameColour] Fakeop assigned to " + r + " by console.");
+        		}
+        		r.setDisplayName(ChatColor.RED + "[Op] " + r.getName() + ChatColor.WHITE);
         	} else {
         		logger.info("[NameColour] Command access denied for " + player.getName());
         	}

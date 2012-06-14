@@ -1,10 +1,13 @@
 name: NameColour
 main: com.github.Heliwr.NameColour.NameColour
 author: Heliwr
-version: 0.2
+version: 0.3
 description: >
              Assign rank-based colours to player names
 commands:
   namecolour:
-    description: NameColour control
+    description: reload configuration
     usage: /<command> reload
+  fakeop:
+    description: make a player look like an op, without any of the pesky power
+    usage: /<command> <player>
