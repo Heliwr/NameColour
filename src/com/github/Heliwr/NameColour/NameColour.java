@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -55,10 +56,15 @@ public class NameColour extends JavaPlugin implements Listener {
 		logger.info( pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!" );
     }
 
-	@EventHandler
+    @EventHandler
+	public void onPlayerJoin(PlayerLoginEvent event) {
+		Player player = event.getPlayer();
+		logger.info("[NameColour] " + player.getName() + " logged in to " + event.getHostname() + " from " + event.getAddress().getHostName());
+	}
+
+    @EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
-
 		setColour(player);
 	}
 
@@ -98,12 +104,46 @@ public class NameColour extends JavaPlugin implements Listener {
 				}
     			Player r = fakeopslist.get(0);
         		if (player != null) {
-        			player.sendMessage("[NameColour] Assigning fakeop to" + r + ".");
-            		logger.info("[NameColour] Fakeop assigned to " + r + " by " + player.getName() + ".");
+        			player.sendMessage("[NameColour] Assigning fakeop to " + r.getName() + ".");
+            		logger.info("[NameColour] Fakeop assigned to " + r.getName() + " by " + player.getName() + ".");
         		} else {
-            		logger.info("[NameColour] Fakeop assigned to " + r + " by console.");
+            		logger.info("[NameColour] Fakeop assigned to " + r.getName() + " by console.");
         		}
         		r.setDisplayName(ChatColor.RED + "[Op] " + r.getName() + ChatColor.WHITE);
+        	} else {
+        		logger.info("[NameColour] Command access denied for " + player.getName());
+        	}
+    		return true;
+        } else if (cmdname.equals("nick") && args.length > 0) {
+        	if (player == null || player.isOp() || player.hasPermission("namecolour.admin")) {
+        		List<Player> nicklist = this.getServer().matchPlayer(args[0]);
+				if (nicklist.size() > 1) {
+					player.sendMessage(ChatColor.RED + "Too Many Players Found");
+					return false;
+				} else if(nicklist.size() == 0) {
+					player.sendMessage(ChatColor.RED + "Player" + args[0] + "Not Found");
+					return false;
+				}
+    			Player r = nicklist.get(0);
+    			if(args.length > 1) {
+        			if (player != null) {
+            			player.sendMessage("[NameColour] Assigning nick " + args[1] + " to " + r.getName() + ".");
+                		logger.info("[NameColour] Nick " + args[1] + " assigned to " + r.getName() + " by " + player.getName() + ".");
+            		} else {
+                		logger.info("[NameColour] Nick " + args[1] + " assigned to " + r.getName() + " by console.");
+            		}
+            		r.setDisplayName(args[1]);
+            		setColour(r);    				
+    			} else {
+        			if (player != null) {
+            			player.sendMessage("[NameColour] Removing nick for " + r.getName() + ".");
+                		logger.info("[NameColour] " + player.getName() + " removing nick for " + r.getName() + ".");
+            		} else {
+                		logger.info("[NameColour] Console removing nick for " + r.getName() + ".");
+            		}
+            		r.setDisplayName(r.getName());
+            		setColour(r);
+    			}
         	} else {
         		logger.info("[NameColour] Command access denied for " + player.getName());
         	}
@@ -136,6 +176,7 @@ public class NameColour extends JavaPlugin implements Listener {
 
     private void assignAll() {
     	for (Player r : this.getServer().getOnlinePlayers()) {
+    		r.setDisplayName(r.getName());
     		setColour(r);
 		}
     }
@@ -148,37 +189,37 @@ public class NameColour extends JavaPlugin implements Listener {
 			}
 		}
     	if(colour.equals("BLACK")) {
-			player.setDisplayName(ChatColor.BLACK + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.BLACK + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("DARK_BLUE")) {
-			player.setDisplayName(ChatColor.DARK_BLUE + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.DARK_BLUE + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("DARK_GREEN")) {
-			player.setDisplayName(ChatColor.DARK_GREEN + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.DARK_GREEN + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("DARK_AQUA")) {
-			player.setDisplayName(ChatColor.DARK_AQUA + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.DARK_AQUA + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("DARK_RED")) {
-			player.setDisplayName(ChatColor.DARK_RED + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.DARK_RED + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("DARK_PURPLE")) {
-			player.setDisplayName(ChatColor.DARK_PURPLE + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.DARK_PURPLE + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("GOLD")) {
-			player.setDisplayName(ChatColor.GOLD + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.GOLD + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("GRAY")) {
-			player.setDisplayName(ChatColor.GRAY + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.GRAY + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("DARK_GRAY")) {
-			player.setDisplayName(ChatColor.DARK_GRAY + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.DARK_GRAY + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("BLUE")) {
-			player.setDisplayName(ChatColor.BLUE + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.BLUE + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("GREEN")) {
-			player.setDisplayName(ChatColor.GREEN + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.GREEN + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("AQUA")) {
-			player.setDisplayName(ChatColor.AQUA + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.AQUA + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("RED")) {
-			player.setDisplayName(ChatColor.RED + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.RED + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("LIGHT_PURPLE")) {
-			player.setDisplayName(ChatColor.LIGHT_PURPLE + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.LIGHT_PURPLE + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("YELLOW")) {
-			player.setDisplayName(ChatColor.YELLOW + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.YELLOW + player.getDisplayName() + ChatColor.WHITE);
 		} else if(colour.equals("WHITE")) {
-			player.setDisplayName(ChatColor.WHITE + player.getName() + ChatColor.WHITE);
+			player.setDisplayName(ChatColor.WHITE + player.getDisplayName() + ChatColor.WHITE);
 		}
     }
 }

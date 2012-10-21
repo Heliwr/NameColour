@@ -1,7 +1,7 @@
 name: NameColour
 main: com.github.Heliwr.NameColour.NameColour
 author: Heliwr
-version: 0.3
+version: 0.3.2
 description: >
              Assign rank-based colours to player names
 commands:
@@ -11,3 +11,6 @@ commands:
   fakeop:
     description: make a player look like an op, without any of the pesky power
     usage: /<command> <player>
+  nick:
+    description: temporarily assign a nickname to a player
+    usage: /<command> <player>    
